@@ -1,0 +1,145 @@
+# 系統意圖過濾關鍵字清單 v2.0
+# 用途：
+# 1. coarse_keywords: 用於 Pandas 第一階段粗篩 (Regex Pre-filter)
+# 2. fine_grained_rules: 用於 Snorkel LFs 的正反向表列過濾
+
+categories:
+  # ==========================================
+  # 1. 借貸融資 (Loan & Finance)
+  # ==========================================
+  loan:
+    name_zh: "借貸融資"
+    coarse_keywords:
+      - 貸款
+      - 信貸
+      - 借款
+      - 快易貸
+      - 企業貸
+      - 二胎
+      - 債務
+      - 卡債
+      - 清算
+      - 法拍
+      - 協商
+      - 免頭期
+      - 全額
+      - 強力過件
+      - 槓桿
+      - 免留車
+      - 免保人
+    fine_grained_rules:
+      strong_hits: ["貸款", "信貸", "借款", "快易貸", "企業貸", "二胎", "債務", "卡債", "清算", "法拍", "協商", "免頭期", "全額", "強力過件", "免留車", "免保人"] 
+      weak_hit_logic:
+        targets: []
+        triggers: []
+
+  # ==========================================
+  # 2. 黃色/特種行業 (Porn & Nightlife)
+  # ==========================================
+  porn:
+    name_zh: "黃色特種行業"
+    coarse_keywords:
+      - 八大
+      - 夜場
+      - 酒店
+      - 招待所
+      - 經紀
+      - 公關
+      - 男模
+      - 夜生活
+    fine_grained_rules:
+      strong_hits:
+        - 男模
+        - 看檯
+        - 脫衣
+        - 夜場
+        - 夜生活
+      weak_hit_logic:
+        targets:
+          - 八大
+          - 酒店
+          - 飯局
+          - 招待所
+          - 經紀
+          - 公關
+        triggers:
+          - 兼職
+          - 小姐
+
+  # ==========================================
+  # 3. 博弈 (Gambling)
+  # ==========================================
+  gambling:
+    name_zh: "博弈"
+    coarse_keywords:
+      - 娛樂城
+      - 運彩
+      - 博弈
+    fine_grained_rules:
+      strong_hits: []
+      weak_hit_logic:
+        targets: []
+        triggers: []
+
+  # ==========================================
+  # 4. 詐騙/高風險招募 (Scam & High-Risk Recruitment)
+  # ==========================================
+  scam_recruitment:
+    name_zh: "詐騙高風險招募"
+    coarse_keywords:
+      - 日領
+      - 不問經歷
+      - 炫富
+      - 致富
+      - 免經驗
+      - 免學歷
+      - 免面試
+      - 免工作證明
+      - 財務自由
+      - 低門檻
+    fine_grained_rules:
+      strong_hits:
+        - 日領
+        - 不問經歷
+        - 免經驗
+        - 免面試
+        - 免履歷
+        - 免工作證明
+        - 低門檻
+      weak_hit_logic:
+        targets: [致富, 炫富, 財務自由]
+        triggers: [秘密, 贏家]
+
+  # ==========================================
+  # 5. 異常/未分類高風險 (Anomaly / OOD)
+  # 預留給未來透過向量距離 (Mahalanobis) 找出的未知威脅
+  # ==========================================
+  anomaly:
+    name_zh: "異常未分類高風險"
+    coarse_keywords: []
+    fine_grained_rules:
+      strong_hits: []
+      weak_hit_logic:
+        targets: []
+        triggers: []
+
+  # ==========================================
+  # 6. 毒品 (Drugs)
+  # ==========================================
+  drugs:
+    name_zh: "毒品"
+    coarse_keywords: []
+    fine_grained_rules:
+      strong_hits: []
+      weak_hit_logic:
+        targets: []
+        triggers: []
+
+# ==========================================
+# 其他設定 (Other Configurations)
+# ==========================================
+# --- 地理特徵脫敏清單 --- [LOC]
+locations:
+  cities: ["台北", "台中", "台南", "高雄", "新北", "桃園", "新竹", "苗栗", "彰化", "南投", "雲林", "嘉義", "屏東", "宜蘭", "花蓮", "台東", "澎湖", "金門", "連江"]
+  districts: ["萬華", "西門", "板橋", "中壢", "五期", "七期", "信義區", "中山區", "大安區"]
+  tech_parks: ["竹科", "中科", "南科"]
